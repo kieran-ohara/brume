@@ -2,7 +2,9 @@
 FROM debian:buster
 
 RUN apt-get clean && apt-get update -y && apt-get install -y \
-      git bc sshfs bison flex libssl-dev make kmod libc6-dev libncurses5-dev
+      git bc sshfs bison flex libssl-dev make kmod libc6-dev libncurses5-dev \
+      crossbuild-essential-armhf \
+      crossbuild-essential-arm64
 
 ENV ARCH=arm64
 
