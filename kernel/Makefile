@@ -10,13 +10,14 @@ $(LGL).zip:
 	curl -SL https://github.com/gl-inet/mv1000-ubuntu-kernel/archive/refs/heads/master.zip -o $@
 $(LGL): $(LGL).zip
 	unzip $<
-$(LGL)/arch/arm64/boot/Image $(LGL)/arch/arm64/modules &: $(LGL) Dockerfile.tar env-file.txt
-	docker run --rm --env-file env-file.txt  -v $(CURDIR)/$<:/build -w /build cross-compile
 
 LMV:=linux-marvell-linux-4.14.76-armada-18.12
 $(LMV).zip:
 	curl -SL https://github.com/MarvellEmbeddedProcessors/linux-marvell/archive/refs/heads/linux-4.14.76-armada-18.12.zip -o $@
 $(LMV): $(LMV).zip
 	unzip $<
-$(LMV)/arch/arm64/boot/Image $(LMV)/arch/arm64/modules &: $(LMV) Dockerfile.tar env-file.txt
+
+%/arch/arm64/boot/Image %/arch/arm64/modules &: % Dockerfile.tar env-file.txt
 	docker run --rm --env-file env-file.txt  -v $(CURDIR)/$<:/build -w /build cross-compile
+	touch $*/arch/arm64/boot/Image
+	touch $*/arch/arm64/modules
