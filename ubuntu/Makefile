@@ -9,6 +9,6 @@ Dockerfile.tar: Dockerfile
 	docker build -t virt-make-fs .
 	docker save virt-make-fs > $@
 
-image.qcow2: ubuntu-18.04.3-20200109.tar.gz Dockerfile.tar
-	docker run --rm -v $(PWD):/workspace -w /workspace \
+%.qcow2: %.tar.gz Dockerfile.tar
+	docker run --rm -v $(CURDIR):/workspace -w /workspace \
 		virt-make-fs -F qcow2 $< $@
