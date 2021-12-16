@@ -4,7 +4,7 @@ ubuntu/ubuntu-18.04.3-20200109:
 ubuntu/newbuntu: ubuntu/ubuntu-18.04.3-20200109
 	cp -a $< $@
 
-MV1000_KERNEL:=mv1000-ubuntu-kernel-master/arch/arm64
+MV1000_KERNEL:=mv1000-ubuntu-kernel-master.unzip/arch/arm64
 kernel/$(MV1000_KERNEL)/boot/Image kernel/$(MV1000_KERNEL)/modules &:
 	make -C kernel $(MV1000_KERNEL)/boot/Image
 
