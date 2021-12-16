@@ -1,6 +1,5 @@
 *.zip
 Dockerfile.tar
 env-file.txt
-kernel.zip
 linux-marvell-linux-4.14.76-armada-18.12
 mv1000-ubuntu-kernel-master
