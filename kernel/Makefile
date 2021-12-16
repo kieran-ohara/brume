@@ -11,7 +11,7 @@ $(LGL).zip:
 $(LGL): $(LGL).zip
 	unzip $<
 $(LGL)/arch/arm64/boot/Image $(LGL)/arch/arm64/modules &: $(LGL) Dockerfile.tar env-file.txt
-	docker run --rm --env-file env-file.txt  -v $(PWD)/$<:/build -w /build cross-compile
+	docker run --rm --env-file env-file.txt  -v $(CURDIR)/$<:/build -w /build cross-compile
 
 LMV:=linux-marvell-linux-4.14.76-armada-18.12
 $(LMV).zip:
@@ -19,4 +19,4 @@ $(LMV).zip:
 $(LMV): $(LMV).zip
 	unzip $<
 $(LMV)/arch/arm64/boot/Image $(LMV)/arch/arm64/modules &: $(LMV) Dockerfile.tar env-file.txt
-	docker run --rm --env-file env-file.txt  -v $(PWD)/$<:/build -w /build cross-compile
+	docker run --rm --env-file env-file.txt  -v $(CURDIR)/$<:/build -w /build cross-compile
