@@ -5,13 +5,13 @@ ubuntu/newbuntu: ubuntu/ubuntu-18.04.3-20200109
 	cp -a $< $@
 
 MV1000_KERNEL:=mv1000-ubuntu-kernel-master.unzip/arch/arm64
-kernel/$(MV1000_KERNEL)/boot/Image kernel/$(MV1000_KERNEL)/modules &:
+kernel/$(MV1000_KERNEL)/boot/Image kernel/$(MV1000_KERNEL)/modules/lib/modules &:
 	make -C kernel $(MV1000_KERNEL)/boot/Image
 
 ubuntu/newbuntu/boot/Image: kernel/$(MV1000_KERNEL)/boot/Image ubuntu/newbuntu
 	cp $< $@
 
-ubuntu/newbuntu/lib/modules: kernel/$(MV1000_KERNEL)/modules ubuntu/newbuntu
+ubuntu/newbuntu/lib/modules: kernel/$(MV1000_KERNEL)/modules/lib/modules ubuntu/newbuntu
 	rm -rf $@ || true
 	cp -a $< $@
 
