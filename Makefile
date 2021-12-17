@@ -16,7 +16,7 @@ ubuntu/newbuntu/lib/modules: kernel/$(MV1000_KERNEL)/modules ubuntu/newbuntu
 	cp -a $< $@
 
 ubuntu/newbuntu.tar.gz: ubuntu/newbuntu ubuntu/newbuntu/boot/Image ubuntu/newbuntu/lib/modules
-	tar -C $< -czf $@ .
+	make -C $(@D) $(@F)
 
 ubuntu/newbuntu.qcow2: ubuntu/newbuntu.tar.gz
 	make -C $(@D) newbuntu.qcow2

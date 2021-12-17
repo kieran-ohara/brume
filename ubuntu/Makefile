@@ -12,6 +12,10 @@ Dockerfile.tar: Dockerfile
 env-file.txt:
 	touch $@
 
+%.tar.gz:
+	cd $* && tar -czvf $@ *
+	mv $*/$@ $@
+
 %.qcow2: %.tar.gz Dockerfile.tar env-file.txt
 	docker run --rm -v $(CURDIR):/workspace -w /workspace \
 		--env-file env-file.txt \
