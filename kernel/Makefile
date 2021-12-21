@@ -1,6 +1,6 @@
 Dockerfile.tar: Dockerfile entrypoint.sh
 	docker build -t cross-compile .
-	docker save cross-compile > $@
+	touch $@
 
 env-file.txt:
 	touch $@
