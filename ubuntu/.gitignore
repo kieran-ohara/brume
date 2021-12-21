@@ -1,4 +1,5 @@
 Dockerfile.tar
+env-file.txt
 image.qcow2
 ubuntu-18.04.3-20200109
 ubuntu-18.04.3-20200109.tar.gz
