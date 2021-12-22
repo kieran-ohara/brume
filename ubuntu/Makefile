@@ -5,10 +5,6 @@ ubuntu-18.04.3-20200109: ubuntu-18.04.3-20200109.tar.gz
 	mkdir $@
 	tar -zxf $< --directory $@
 
-Dockerfile.tar: Dockerfile
-	docker build -t virt-make-fs .
-	touch $@
-
 env-file.txt:
 	touch $@
 
@@ -16,7 +12,7 @@ env-file.txt:
 	cd $* && tar -czvf $@ *
 	mv $*/$@ $@
 
-%.qcow2: %.tar.gz Dockerfile.tar env-file.txt
+%.qcow2: %.tar.gz env-file.txt
 	docker run --rm -v $(CURDIR):/workspace -w /workspace \
 		--env-file env-file.txt \
-		virt-make-fs -F qcow2 $< $@
+		kieranbamforth/libguestfs:main virt-make-fs -F qcow2 $< $@
