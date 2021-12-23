@@ -1,22 +1,32 @@
+# Prerequisites
+KERNEL:=mv1000-ubuntu-kernel-master
+KERNEL_ARM64=$(KERNEL).unzip/arch/arm64
+
+# Only supports GL-iNet ubuntu for now.
 ubuntu/ubuntu-18.04.3-20200109:
 	make -C $(@D) $(@F)
+kernel/$(KERNEL_ARM64)/boot/Image kernel/$(KERNEL_ARM64)/modules/lib/modules &:
+	make -C kernel $(KERNEL_ARM64)/boot/Image
 
-ubuntu/newbuntu: ubuntu/ubuntu-18.04.3-20200109
-	cp -a $< $@
+# Build task
+BUILD_DIR=ubuntu/build
 
-MV1000_KERNEL:=mv1000-ubuntu-kernel-master.unzip/arch/arm64
-kernel/$(MV1000_KERNEL)/boot/Image kernel/$(MV1000_KERNEL)/modules/lib/modules &:
-	make -C kernel $(MV1000_KERNEL)/boot/Image
-
-ubuntu/newbuntu/boot/Image: kernel/$(MV1000_KERNEL)/boot/Image ubuntu/newbuntu
-	cp $< $@
-
-ubuntu/newbuntu/lib/modules: kernel/$(MV1000_KERNEL)/modules/lib/modules ubuntu/newbuntu
+$(BUILD_DIR)/$(KERNEL): ubuntu/ubuntu-18.04.3-20200109
 	rm -rf $@ || true
+	mkdir -p $(@D)
+	cp -a $< $@
+$(BUILD_DIR)/$(KERNEL)/boot/Image: kernel/$(KERNEL_ARM64)/boot/Image
+	mkdir -p $(@D)
+	cp -a $< $@
+$(BUILD_DIR)/$(KERNEL)/lib/modules: kernel/$(KERNEL_ARM64)/modules/lib/modules
+	rm -rf $@
+	mkdir -p $(@D)
 	cp -a $< $@
 
-ubuntu/newbuntu.tar.gz: ubuntu/newbuntu ubuntu/newbuntu/boot/Image ubuntu/newbuntu/lib/modules
-	make -C $(@D) $(@F)
-
-ubuntu/newbuntu.qcow2: ubuntu/newbuntu.tar.gz
-	make -C $(@D) newbuntu.qcow2
+$(BUILD_DIR)/$(KERNEL).tar.gz: $(BUILD_DIR)/$(KERNEL) $(BUILD_DIR)/$(KERNEL)/boot/Image $(BUILD_DIR)/$(KERNEL)/lib/modules
+	cd $(BUILD_DIR)/$(KERNEL) && tar -czvf $(@F) *
+	mv $(BUILD_DIR)/$(KERNEL)/$(KERNEL).tar.gz $@
+	touch $@
+$(BUILD_DIR)/$(KERNEL).qcow2: $(BUILD_DIR)/$(KERNEL).tar.gz
+	docker run --rm -v $(CURDIR):/workspace -w /workspace \
+		kieranbamforth/libguestfs:main virt-make-fs -F qcow2 $< $@
