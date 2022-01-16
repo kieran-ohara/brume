@@ -21,3 +21,9 @@ env-file.txt:
 	docker run --rm --env-file env-file.txt  -v $(CURDIR)/$<:/build -w /build cross-compile
 	touch $*/arch/arm64/boot/Image
 	touch $*/arch/arm64/modules
+
+%/interactive-compile-shell: % Dockerfile.tar env-file.txt
+	docker run -it --rm --env-file env-file.txt -v $(CURDIR)/$<:/build \
+		-w /build \
+		--entrypoint /bin/bash \
+		cross-compile
